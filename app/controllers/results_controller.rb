@@ -24,7 +24,8 @@ class ResultsController < ApplicationController
   # POST /results
   # POST /results.json
   def create
-    format.xml { puts "here" }
+    puts "HERE"
+    # format.xml { puts "here" }
     # @result = Result.new(result_params)
 
     # respond_to do |format|
