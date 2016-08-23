@@ -25,19 +25,17 @@ class ResultsController < ApplicationController
   # POST /results.json
   def create
     puts "HERE"
-    render nil
-    # format.xml { puts "here" }
-    # @result = Result.new(result_params)
+    @result = Result.new(result_params)
 
-    # respond_to do |format|
-      # if @result.save
-        # format.html { redirect_to @result, notice: 'Result was successfully created.' }
-        # format.json { render :show, status: :created, location: @result }
-      # else
-        # format.html { render :new }
-        # format.json { render json: @result.errors, status: :unprocessable_entity }
-      # end
-    # end
+    respond_to do |format|
+      if @result.save
+        format.html { redirect_to @result, notice: 'Result was successfully created.' }
+        format.json { render :show, status: :created, location: @result }
+      else
+        format.html { render :new }
+        format.json { render json: @result.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # PATCH/PUT /results/1
