@@ -3,8 +3,11 @@ class ResultsController < ApplicationController
   before_action :set_result, only: [:show, :edit, :update, :destroy]
 
   def parse
-    puts "HHHHHHHHHHH"
-    puts JSON.pretty_unparse(JSON.parse(Hash.from_xml(params["dr"]).to_json))
+    puts "###############################################"
+    results = Hash.from_xml(params["dr"]).to_json
+    puts JSON.pretty_unparse(JSON.parse(results))
+    puts "###############################################"
+    puts results["questions"]["yesNoQuestion"]["id"]
   end
 
   # GET /results
