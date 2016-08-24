@@ -7,7 +7,7 @@ class ResultsController < ApplicationController
     results = JSON.parse(Hash.from_xml(params["dr"]).to_json)
     puts JSON.pretty_unparse(results)
     puts "###############################################"
-    resultIndex results["quizReport"]["questions"]["yesNoQuestion"]["userAnswerIndex"]
+    resultIndex = results["quizReport"]["questions"]["yesNoQuestion"]["userAnswerIndex"]
     puts results["quizReport"]["questions"]["yesNoQuestion"]["answer"][resultIndex]
   end
 
