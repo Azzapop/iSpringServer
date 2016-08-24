@@ -4,8 +4,8 @@ class ResultsController < ApplicationController
 
   def parse
     puts "###############################################"
-    results = Hash.from_xml(params["dr"]).to_json
-    puts JSON.pretty_unparse(JSON.parse(results))
+    results = JSON.parse(Hash.from_xml(params["dr"]).to_json)
+    puts JSON.pretty_unparse(results)
     puts "###############################################"
     puts results["questions"]["yesNoQuestion"]["id"]
   end
