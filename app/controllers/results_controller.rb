@@ -4,8 +4,7 @@ class ResultsController < ApplicationController
 
   def parse
     puts "HHHHHHHHHHH"
-    json = JSON.pretty_generate(Hash.from_xml(params["dr"]).to_json)
-    puts json
+    puts JSON.pretty_generate(Hash.from_xml(params["dr"]).to_json)
   end
 
   # GET /results
