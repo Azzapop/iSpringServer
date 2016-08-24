@@ -7,7 +7,7 @@ class ResultsController < ApplicationController
     results = JSON.parse(Hash.from_xml(params["dr"]).to_json)
     puts JSON.pretty_unparse(results)
     puts "###############################################"
-    puts results["quizReport"]
+    puts results["quizReport"]["questions"]["yesNoQuestion"]["id"]
   end
 
   # GET /results
