@@ -1,6 +1,11 @@
 class ResultsController < ApplicationController
   before_action :set_result, only: [:show, :edit, :update, :destroy]
 
+  def parse
+    puts "HHHHHHHHHHH"
+    puts params["dr"]
+  end
+
   # GET /results
   # GET /results.json
   def index
@@ -24,7 +29,6 @@ class ResultsController < ApplicationController
   # POST /results
   # POST /results.json
   def create
-    puts "HERE"
     @result = Result.new(result_params)
 
     respond_to do |format|
