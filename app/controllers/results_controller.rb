@@ -90,7 +90,7 @@ class ResultsController < ApplicationController
   end
 
   def hubspotCreateOrUpdateContact(email, params)
-    url = "#{BASE_PATH}#{CREATE_UPDATE_CONTACT_PATH.gsub(/:email/, email)}#{API_KEY_PATH}"
+    url = "#{BASE_PATH}#{CREATE_UPDATE_CONTACT_PATH.gsub(/:contact_email/, email)}#{API_KEY_PATH}"
     contact_hash = get_hash(params)
     @result = HTTParty.post(url, body: contact_hash.to_json, headers: { 'Content-Type' => 'application/json' }, format: :json)
     return @result
