@@ -2,6 +2,10 @@ require 'json'
 class ResultsController < ApplicationController
   before_action :set_result, only: [:show, :edit, :update, :destroy]
 
+  BASE_PATH                  = "https://api.hubapi.com"
+  API_KEY_PATH               = "?hapikey=#{ENV['CF_HUBSPOT_API_KEY']}"
+  CREATE_UPDATE_CONTACT_PATH = "/contacts/v1/contact/createOrUpdate/email/:contact_email"
+
   def parse
     puts "###############################################"
     results = JSON.parse(Hash.from_xml(params["dr"]).to_json)
@@ -9,6 +13,9 @@ class ResultsController < ApplicationController
     puts "###############################################"
     resultIndex = results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["userAnswerIndex"].to_i
     puts results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["answer"][resultIndex]
+    puts "###############################################"
+    puts hubspotCreateOrUpdateContact("aaron@coderfactory.com", {firstname: "Aaron", lastname: "Hook"})
+    puts "###############################################"
   end
 
   # GET /results
@@ -72,13 +79,29 @@ class ResultsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_result
-      @result = Result.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_result
+    @result = Result.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def result_params
-      params.fetch(:result, {})
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def result_params
+    params.fetch(:result, {})
+  end
+
+  def hubspotCreateOrUpdateContact(email, params)
+    url = "#{BASE_PATH}#{CREATE_UPDATE_CONTACT_PATH.gsub(/:email/, email)}#{API_KEY_PATH}"
+    contact_hash = get_hash(params)
+    @result = HTTParty.post(url, body: contact_hash.to_json, headers: { 'Content-Type' => 'application/json' }, format: :json)
+    return @result
+  end
+
+  def get_hash(params)
+    properties = []
+    params.each do |key, data|
+      hash = {"property" => key, "value" => data}
+      properties << hash
     end
+    return {"properties" => properties}
+  end
 end
