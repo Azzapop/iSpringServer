@@ -16,10 +16,11 @@ class ResultsController < ApplicationController
     puts "###############################################"
     puts hubspotCreateOrUpdateContact("aaron@coderfactory.com", {firstname: "Aaron", lastname: "Test"})
     puts "###############################################"
-    respond_to do |format|
-      format.json { render :json => {}, :status => :ok }
-      format.xml { render :xml => {}, :status => :ok }
-    end
+    render :status => :ok
+    # respond_to do |format|
+      # format.json { render :json => {}, :status => :ok }
+      # format.xml { render :xml => {}, :status => :ok }
+    # end
   end
 
   # GET /results
