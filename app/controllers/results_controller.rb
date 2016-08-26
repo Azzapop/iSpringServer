@@ -18,6 +18,7 @@ class ResultsController < ApplicationController
     puts "###############################################"
     respond_to do |format|
       format.json { render :json => {}, :status => :ok }
+      format.xml { render :xml => {}, :status => :ok }
     end
   end
 
