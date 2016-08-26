@@ -16,6 +16,7 @@ class ResultsController < ApplicationController
     puts "###############################################"
     puts hubspotCreateOrUpdateContact("aaron@coderfactory.com", {firstname: "Aaron", lastname: "Test"})
     puts "###############################################"
+    format.json { render :json => final_obj, :status => :ok }
   end
 
   # GET /results
