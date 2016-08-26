@@ -11,8 +11,8 @@ class ResultsController < ApplicationController
     results = JSON.parse(Hash.from_xml(params["dr"]).to_json)
     puts JSON.pretty_unparse(results)
     puts "###############################################"
-    resultIndex = results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["userAnswerIndex"].to_i
-    puts results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["answer"][resultIndex]
+    resultIndex = results["quizReport"]["questions"]["trueFalseQuestion"]["answers"]["userAnswerIndex"].to_i
+    puts results["quizReport"]["questions"]["trueFalseQuestion"]["answers"]["answer"][resultIndex]
     puts "###############################################"
     puts hubspotCreateOrUpdateContact("aaron@coderfactory.com", {firstname: "Aaron", lastname: "Test"})
     puts "###############################################"
