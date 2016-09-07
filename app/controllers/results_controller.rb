@@ -1,10 +1,18 @@
 require 'json'
+require "erb"
+require 'oauth2'
+require "base64"
+include ERB::Util
 class ResultsController < ApplicationController
   before_action :set_result, only: [:show, :edit, :update, :destroy]
 
-  BASE_PATH                  = "https://api.hubapi.com"
-  API_KEY_PATH               = "?hapikey=#{ENV['CF_HUBSPOT_API_KEY']}"
-  CREATE_UPDATE_CONTACT_PATH = "/contacts/v1/contact/createOrUpdate/email/:contact_email"
+  BASE_PATH                   = "https://api.hubapi.com"
+  API_KEY_PATH                = "?hapikey=#{ENV['CF_HUBSPOT_API_KEY']}"
+  CREATE_UPDATE_CONTACT_PATH  = "/contacts/v1/contact/createOrUpdate/email/:contact_email"
+
+  TOKEN_PATH                  = "https://stars.udonsystems.com/connect/token"
+  STARS_BASE_PATH             = "https://stars.udonsystems.com/api"
+  STARS_API_KEY_PATH                   = "?username=#{ENV['STARS_CLIENT_ID']}&api_key=#{ENV['STARS_CLIENT_SECRET']}"
 
   def parse
     puts "###############################################"
@@ -25,6 +33,25 @@ class ResultsController < ApplicationController
       # format.json { render :json => {}, :status => :ok }
       # format.xml { render :xml => {}, :status => :ok }
     # end
+  end
+
+  def stars
+    client_id = ENV['STARS_CLIENT_ID']
+    client_secret = ENV['STARS_CLIENT_SECRET']
+    credentials = Base64.encode64("#{client_id}:#{client_secret}").gsub("\n", '')
+    url = TOKEN_PATH
+    body = "grant_type=client_credentials"
+    headers = {
+      "Authorization" => "Basic #{credentials}",
+      "Content-Type" => "application/x-www-form-urlencoded;charset=UTF-8"
+    }
+    r = HTTParty.post(url, body: body, headers: headers)
+    if r["token_type"] == "Bearer"
+      bearer_token = r["access_token"]
+    end
+    api_auth_header = {"Authorization" => "Bearer #{bearer_token}"}
+    url = "#{STARS_BASE_PATH}/languages"
+    puts HTTParty.get(url, headers: api_auth_header).body
   end
 
   # GET /results
