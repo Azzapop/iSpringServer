@@ -16,8 +16,7 @@ class ResultsController < ApplicationController
 
   def parse
     puts "###############################################"
-    results = JSON.parse(Hash.from_xml(params).to_json)
-    redirect_to "/results", r: results
+    results = JSON.parse(params).to_json)
     puts JSON.pretty_generate(results)
     puts "###############################################"
     resultIndex = results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["userAnswerIndex"].to_i
