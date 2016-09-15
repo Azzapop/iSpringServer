@@ -16,6 +16,7 @@ class ResultsController < ApplicationController
   STARS_API_KEY_PATH                   = "?username=#{ENV['STARS_CLIENT_ID']}&api_key=#{ENV['STARS_CLIENT_SECRET']}"
 
   def parse
+    puts request.original_url
     puts "###############################################"
     results = params.to_json
     puts pp params["properties"]
