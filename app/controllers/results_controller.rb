@@ -16,7 +16,7 @@ class ResultsController < ApplicationController
 
   def parse
     puts "###############################################"
-    results = JSON.parse(Hash.from_xml(params["dr"]).to_json)
+    results = JSON.parse(Hash.from_xml(params).to_json)
     puts JSON.pretty_unparse(results)
     puts "###############################################"
     resultIndex = results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["userAnswerIndex"].to_i
@@ -58,6 +58,7 @@ class ResultsController < ApplicationController
   # GET /results.json
   def index
     @results = Result.all
+    puts hubspotCreateOrUpdateContact("aaron@coderfactory.com", {firstname: "Aaron", lastname: "Test"})
   end
 
   # GET /results/1
