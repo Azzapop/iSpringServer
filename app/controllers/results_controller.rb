@@ -16,7 +16,7 @@ class ResultsController < ApplicationController
 
   def parse
     puts "###############################################"
-    results = JSON.parse(params).to_json
+    results = params.to_json
     puts JSON.pretty_generate(results)
     puts "###############################################"
     resultIndex = results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["userAnswerIndex"].to_i
