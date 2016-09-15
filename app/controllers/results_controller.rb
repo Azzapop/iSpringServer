@@ -18,8 +18,9 @@ class ResultsController < ApplicationController
   def parse
     puts "###############################################"
     results = params.to_json
-    puts pp params
+    puts pp params["properties"]
     puts "###############################################"
+    return :status => :ok
     resultIndex = results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["userAnswerIndex"].to_i
     puts results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["answer"][resultIndex]
     puts "###############################################"
@@ -29,7 +30,6 @@ class ResultsController < ApplicationController
     headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
     headers['Access-Control-Request-Method'] = '*'
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-    return :status => :ok
     # respond_to do |format|
       # format.json { render :json => {}, :status => :ok }
       # format.xml { render :xml => {}, :status => :ok }
