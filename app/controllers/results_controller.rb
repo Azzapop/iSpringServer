@@ -18,7 +18,7 @@ class ResultsController < ApplicationController
   def parse
     puts "###############################################"
     results = params.to_json
-    puts PP.pretty_print(params)
+    puts pp params
     puts "###############################################"
     resultIndex = results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["userAnswerIndex"].to_i
     puts results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["answer"][resultIndex]
