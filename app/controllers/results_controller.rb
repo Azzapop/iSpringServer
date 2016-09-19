@@ -13,13 +13,13 @@ class ResultsController < ApplicationController
 
   TOKEN_PATH                  = "https://stars.udonsystems.com/connect/token"
   STARS_BASE_PATH             = "https://stars.udonsystems.com/api"
-  STARS_API_KEY_PATH                   = "?username=#{ENV['STARS_CLIENT_ID']}&api_key=#{ENV['STARS_CLIENT_SECRET']}"
+  STARS_API_KEY_PATH          = "?username=#{ENV['STARS_CLIENT_ID']}&api_key=#{ENV['STARS_CLIENT_SECRET']}"
 
   def parse
     puts request.original_url
     puts "###############################################"
     results = params.to_json
-    puts pp params["properties"]
+    puts pp params["properties"]["email"]["value"]
     puts "###############################################"
     return :status => :ok
     resultIndex = results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["userAnswerIndex"].to_i
@@ -47,13 +47,13 @@ class ResultsController < ApplicationController
       "Authorization" => "Basic #{credentials}",
       "Content-Type" => "application/x-www-form-urlencoded;charset=UTF-8"
     }
-    r = HTTParty.post(url, body: body, headers: headers)
+    puts r = HTTParty.post(url, body: body, headers: headers)
     if r["token_type"] == "Bearer"
       bearer_token = r["access_token"]
     end
     api_auth_header = {"Authorization" => "Bearer #{bearer_token}"}
     url = "#{STARS_BASE_PATH}/languages"
-    puts HTTParty.get(url, headers: api_auth_header).body
+    puts (HTTParty.get(url, headers: api_auth_header).select {|l| l["name"] == "Irish"}).first.class
   end
 
   # GET /results
