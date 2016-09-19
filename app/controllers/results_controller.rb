@@ -19,7 +19,7 @@ class ResultsController < ApplicationController
     puts request.original_url
     puts "###############################################"
     results = params.to_json
-    puts pp params["properties"]["email"]["value"]
+    puts params["properties"]["email"]["value"]
     puts "###############################################"
     return :status => :ok
     resultIndex = results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["userAnswerIndex"].to_i
