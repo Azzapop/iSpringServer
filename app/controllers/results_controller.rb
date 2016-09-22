@@ -1,5 +1,4 @@
 require 'json'
-require 'pp'
 require "erb"
 require 'oauth2'
 require "base64"
@@ -13,15 +12,13 @@ class ResultsController < ApplicationController
 
   TOKEN_PATH                  = "https://stars.udonsystems.com/connect/token"
   STARS_BASE_PATH             = "https://stars.udonsystems.com/api"
-  STARS_API_KEY_PATH          = "?username=#{ENV['STARS_CLIENT_ID']}&api_key=#{ENV['STARS_CLIENT_SECRET']}"
+  STARS_API_KEY_PATH                   = "?username=#{ENV['STARS_CLIENT_ID']}&api_key=#{ENV['STARS_CLIENT_SECRET']}"
 
   def parse
-    puts request.original_url
     puts "###############################################"
-    results = params.to_json
-    puts params["properties"]["email"]["value"]
+    results = JSON.parse(Hash.from_xml(params["dr"]).to_json)
+    puts JSON.pretty_unparse(results)
     puts "###############################################"
-    return :status => :ok
     resultIndex = results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["userAnswerIndex"].to_i
     puts results["quizReport"]["questions"]["yesNoQuestion"]["answers"]["answer"][resultIndex]
     puts "###############################################"
@@ -31,6 +28,7 @@ class ResultsController < ApplicationController
     headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
     headers['Access-Control-Request-Method'] = '*'
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    return :status => :ok
     # respond_to do |format|
       # format.json { render :json => {}, :status => :ok }
       # format.xml { render :xml => {}, :status => :ok }
@@ -47,21 +45,19 @@ class ResultsController < ApplicationController
       "Authorization" => "Basic #{credentials}",
       "Content-Type" => "application/x-www-form-urlencoded;charset=UTF-8"
     }
-    puts r = HTTParty.post(url, body: body, headers: headers)
+    r = HTTParty.post(url, body: body, headers: headers)
     if r["token_type"] == "Bearer"
       bearer_token = r["access_token"]
     end
     api_auth_header = {"Authorization" => "Bearer #{bearer_token}"}
     url = "#{STARS_BASE_PATH}/languages"
-    puts (HTTParty.get(url, headers: api_auth_header).select {|l| l["name"] == "Irish"}).first.class
+    puts HTTParty.get(url, headers: api_auth_header).body
   end
 
   # GET /results
   # GET /results.json
   def index
-    @data = params[:r]
     @results = Result.all
-    puts hubspotCreateOrUpdateContact("aaron@coderfactory.com", {firstname: "Aaron", lastname: "Test"})
   end
 
   # GET /results/1
